@@ -265,3 +265,27 @@ Received Import Request.
 Start importing Assets/Scenes using Guid(1484206a154c6404093c008f7348d45f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '01c43bc6cf1da6f17255e07e495fd021') in 0.0007078 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
+========================================================================
+Received Import Request.
+  Time since last request: 100.465704 seconds.
+  path: Assets/Scenes/ZombieRun.unity
+  artifactKey: Guid(633d4259beb31584ead030d600e45553) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/ZombieRun.unity using Guid(633d4259beb31584ead030d600e45553) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f5499fb07cb80e8fac6989cf4ad4c89c') in 0.0006336 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.943207 seconds.
+  path: Assets/Scenes/ZombieRun.unity
+  artifactKey: Guid(633d4259beb31584ead030d600e45553) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d)
+Start importing Assets/Scenes/ZombieRun.unity using Guid(633d4259beb31584ead030d600e45553) Importer(2089858483,b0f066a214c2f5e87bad3c948f4d605d) (ScriptedImporter) -> (artifact id: '697c6144a6dc7ce0e7e636484f9f0031') in 0.0118336 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 1
+
+========================================================================
+Received Import Request.
+  Time since last request: 51.219110 seconds.
+  path: Assets/Scenes/SampleScene.unity
+  artifactKey: Guid(99c9720ab356a0642a771bea13969a05) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/SampleScene.unity using Guid(99c9720ab356a0642a771bea13969a05) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '092f7974db3fb175701bdf9959c1e23b') in 0.0006633 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
