@@ -945,7 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieMovement
   speed: 3
-  attackThresholdZ: 0
+  attackThresholdZ: 2
   health: 10
 --- !u!136 &-2442756554735407692
 CapsuleCollider:

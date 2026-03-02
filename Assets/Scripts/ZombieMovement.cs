@@ -8,7 +8,7 @@ public class ZombieMovement : MonoBehaviour
 
     private Animator animator;
 
-    public float attackThresholdZ = 10;
+    public float attackThresholdZ = 15F;
 
     public float health = 10;
 
