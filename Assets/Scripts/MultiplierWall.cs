@@ -23,7 +23,7 @@ public class MultiplierWall : MonoBehaviour
 
     [Header("Movement")]
     
-    [SerializeField] private float speed;
+    [SerializeField] public float speed;
 
     private bool hasBeenTriggered = false;
 

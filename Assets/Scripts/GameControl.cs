@@ -98,7 +98,7 @@ public class GameControl : MonoBehaviour
               20
           );
           Vector3 wallPos = new Vector3(
-              5,
+              0,
               5, 
               30
           );
@@ -112,6 +112,7 @@ public class GameControl : MonoBehaviour
               var operation = (MultiplierWall.ModifierType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
               wallScript.operation = operation;
               wallScript.value = 4;
+              wallScript.speed = 5;
               wallScript.UpdateVisuals(); 
           }
       }
