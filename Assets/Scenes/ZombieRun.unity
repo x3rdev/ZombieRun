@@ -760,6 +760,7 @@ MonoBehaviour:
   playButtonText: {fileID: 1353983343}
   soldier: {fileID: 1162448017}
   zombiePrefab: {fileID: 5478892949380881168, guid: 67b7f18d86c334befbb742791bd97d8c, type: 3}
+  wallPrefab: {fileID: 7008209347098452305, guid: 30dc2bb50b3a17c43acccfa1433a3441, type: 3}
 --- !u!4 &743032643
 Transform:
   m_ObjectHideFlags: 0

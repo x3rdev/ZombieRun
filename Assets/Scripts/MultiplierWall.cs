@@ -36,7 +36,7 @@ public class MultiplierWall : MonoBehaviour
         UpdateVisuals();
     }
 
-    private void UpdateVisuals()
+    public void UpdateVisuals()
     {
         if (gateText == null || gateRenderer == null) return;
 

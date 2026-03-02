@@ -14,10 +14,9 @@ public class GameControl : MonoBehaviour
     [SerializeField] public TextMeshProUGUI loseText;
     [SerializeField] public TextMeshProUGUI winText;
     [SerializeField] public TextMeshProUGUI playButtonText;
-
     [SerializeField] public GameObject soldier;
-
     [SerializeField] public GameObject zombiePrefab;
+    [SerializeField] public GameObject wallPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -92,18 +91,29 @@ public class GameControl : MonoBehaviour
     {
       while (true) 
       {
-          // 1. Wait for X seconds
           yield return new WaitForSeconds(2);
-
-          // 2. Calculate a random position (so they don't all spawn in one line)
-          Vector3 spawnPos = new Vector3(
+          Vector3 zombiePos = new Vector3(
               UnityEngine.Random.Range(-10f, 10f),
               0, 
               20
           );
+          Vector3 wallPos = new Vector3(
+              5,
+              5, 
+              30
+          );
+          Instantiate(zombiePrefab, zombiePos, Quaternion.AngleAxis(180, Vector3.up));
+          GameObject wall = Instantiate(wallPrefab, wallPos, Quaternion.AngleAxis(0, Vector3.up));
+          MultiplierWall wallScript = wall.GetComponent<MultiplierWall>();
 
-          // 3. Create the object
-          Instantiate(zombiePrefab, spawnPos, Quaternion.AngleAxis(180, Vector3.up));
+          if (wallScript != null)
+          {
+              var types = System.Enum.GetValues(typeof(MultiplierWall.ModifierType));
+              var operation = (MultiplierWall.ModifierType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
+              wallScript.operation = operation;
+              wallScript.value = 4;
+              wallScript.UpdateVisuals(); 
+          }
       }
     }
 }
