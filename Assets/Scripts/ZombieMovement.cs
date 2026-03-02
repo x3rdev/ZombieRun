@@ -38,7 +38,7 @@ public class ZombieMovement : MonoBehaviour
     }
 
 
-    void takeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
     }
