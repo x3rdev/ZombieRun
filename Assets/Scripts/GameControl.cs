@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +15,8 @@ public class GameControl : MonoBehaviour
     [SerializeField] public TextMeshProUGUI playButtonText;
 
     [SerializeField] public GameObject soldier;
+
+    [SerializeField] public GameObject zombiePrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,7 +44,7 @@ public class GameControl : MonoBehaviour
                     horizontalInput = 1;
             }
 
-            soldier.transform.Translate(horizontalInput * Time.deltaTime, 0, 0);
+            soldier.transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);
         }
     }
 
@@ -54,6 +58,7 @@ public class GameControl : MonoBehaviour
         playButton.SetActive(false);
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
+        StartCoroutine(SpawnObjectLoop());
     }
 
     public void WinGame()
@@ -80,5 +85,24 @@ public class GameControl : MonoBehaviour
         playButton.SetActive(true);
         loseText.gameObject.SetActive(true);
         winText.gameObject.SetActive(false);
+    }
+
+    public IEnumerator SpawnObjectLoop()
+    {
+      while (true) 
+      {
+          // 1. Wait for X seconds
+          yield return new WaitForSeconds(2);
+
+          // 2. Calculate a random position (so they don't all spawn in one line)
+          Vector3 spawnPos = transform.position + new Vector3(
+              1, 
+              0, 
+              20
+          );
+
+          // 3. Create the object
+          Instantiate(zombiePrefab, spawnPos, Quaternion.identity);
+      }
     }
 }

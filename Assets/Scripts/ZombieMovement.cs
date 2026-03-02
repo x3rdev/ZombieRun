@@ -8,7 +8,7 @@ public class ZombieMovement : MonoBehaviour
 
     private Animator animator;
 
-    public float attackThresholdX = 10;
+    public float attackThresholdZ = 10;
 
     public float health = 10;
 
@@ -21,9 +21,9 @@ public class ZombieMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        transform.Translate(Vector3.back * speed * Time.deltaTime);
 
-        if (transform.position.x > attackThresholdX)
+        if (transform.position.z < attackThresholdZ)
         {
             animator.SetBool("isAttacking", true);
             speed = 0;
