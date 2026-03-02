@@ -98,8 +98,8 @@ public class GameControl : MonoBehaviour
               20
           );
           Vector3 wallPos = new Vector3(
-              0,
-              5, 
+              5,
+              1.5F, 
               30
           );
           Instantiate(zombiePrefab, zombiePos, Quaternion.AngleAxis(180, Vector3.up));

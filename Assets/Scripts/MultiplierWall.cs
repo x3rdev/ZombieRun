@@ -61,4 +61,17 @@ public class MultiplierWall : MonoBehaviour
         propBlock.SetColor("_Color", targetColor);     // Legacy Standard
         gateRenderer.SetPropertyBlock(propBlock);
     }
+
+    private void OnTriggerEnter(Collider other)
+{
+    // 1. Check if it's a soldier and if we haven't hit a wall yet
+    if (!hasBeenTriggered && other.CompareTag("Player"))
+    {
+        hasBeenTriggered = true; // Lock the gate
+        
+
+        // 3. Visual feedback: Disable the gate or play an effect
+        gameObject.SetActive(false); 
+    }
+}
 }
