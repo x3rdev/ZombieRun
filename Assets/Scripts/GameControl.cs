@@ -1,8 +1,6 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
 {  
@@ -14,7 +12,7 @@ public class GameControl : MonoBehaviour
     [SerializeField] public TextMeshProUGUI winText;
     [SerializeField] public TextMeshProUGUI playButtonText;
 
-    [SerializeField] public GameObject soldierPrefab;
+    [SerializeField] public GameObject soldier;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,7 +32,7 @@ public class GameControl : MonoBehaviour
         if(gameRunning)
         {   
             float horizontalInput = 0;
-            if (horizontalInput == 0 && Keyboard.current != null)
+            if (Keyboard.current != null)
             {
                 if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
                     horizontalInput = -1;
@@ -42,7 +40,7 @@ public class GameControl : MonoBehaviour
                     horizontalInput = 1;
             }
 
-            soldierPrefab.transform.Translate(horizontalInput * Time.deltaTime, 0, 0);
+            soldier.transform.Translate(horizontalInput * Time.deltaTime, 0, 0);
         }
     }
 
