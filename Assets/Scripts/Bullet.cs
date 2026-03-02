@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SoldierWalking
+public class Bullets
 {
     
 }
