@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class GameControl : MonoBehaviour
@@ -96,13 +97,13 @@ public class GameControl : MonoBehaviour
 
           // 2. Calculate a random position (so they don't all spawn in one line)
           Vector3 spawnPos = transform.position + new Vector3(
-              1, 
+              0, 
               0, 
               20
           );
 
           // 3. Create the object
-          Instantiate(zombiePrefab, spawnPos, Quaternion.identity);
+          Instantiate(zombiePrefab, spawnPos, Quaternion.AngleAxis(180, Vector3.up));
       }
     }
 }
