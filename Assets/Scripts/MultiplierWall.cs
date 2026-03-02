@@ -27,6 +27,11 @@ public class MultiplierWall : MonoBehaviour
 
     private bool hasBeenTriggered = false;
 
+    private void OnStart()
+    {
+      Destroy(gameObject, 5);
+    }
+
     private void Update()
     {
       transform.Translate(Vector3.back * speed * Time.deltaTime);
@@ -63,15 +68,15 @@ public class MultiplierWall : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-{
-    // 1. Check if it's a soldier and if we haven't hit a wall yet
-    if (!hasBeenTriggered && other.CompareTag("Player"))
     {
-        hasBeenTriggered = true; // Lock the gate
-        
+        // 1. Check if it's a soldier and if we haven't hit a wall yet
+        if (!hasBeenTriggered && other.CompareTag("Player"))
+        {
+            hasBeenTriggered = true; // Lock the gate
+            
 
-        // 3. Visual feedback: Disable the gate or play an effect
-        gameObject.SetActive(false); 
+            // 3. Visual feedback: Disable the gate or play an effect
+            gameObject.SetActive(false); 
+        }
     }
-}
 }
