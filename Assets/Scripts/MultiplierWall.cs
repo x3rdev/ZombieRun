@@ -45,7 +45,7 @@ public class MultiplierWall : MonoBehaviour
         {
             case ModifierType.Add: gateText.text = "+" + value; break;
             case ModifierType.Sub: gateText.text = "-" + value; break;
-            case ModifierType.Mul: gateText.text = value + "x"; break;
+            case ModifierType.Mul: gateText.text = "×" +value; break;
             case ModifierType.Div: gateText.text = "÷" + value; break;
         }
 
