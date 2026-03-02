@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 119ea952bda91a347a953d82d96efb62
+guid: 83ff6f27288b9854bb43453b86bf8019
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
-      74: -8095203637548236512
-    second: root|T_Pose
+      74: 3283157225196924676
+    second: root|Zombie_Idle
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -112,5 +112,5 @@ AssetOrigin:
   productId: 272407
   packageName: GAMWILL Zombie fun character free sample
   packageVersion: 1.0
-  assetPath: Assets/Mesh/Zombie_T-Pose.fbx
+  assetPath: Assets/GAMWILL/GAMWILL Zombie fun character free sample/Animation/Zombie_Idle.fbx
   uploadId: 670389

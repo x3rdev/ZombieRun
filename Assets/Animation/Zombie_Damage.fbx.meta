@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 119ea952bda91a347a953d82d96efb62
+guid: c9b1c8ef534fcbe49974514e026f8cdf
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
-      74: -8095203637548236512
-    second: root|T_Pose
+      74: -8348580484168455180
+    second: root|Zombie_Damage
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -112,5 +112,5 @@ AssetOrigin:
   productId: 272407
   packageName: GAMWILL Zombie fun character free sample
   packageVersion: 1.0
-  assetPath: Assets/Mesh/Zombie_T-Pose.fbx
+  assetPath: Assets/GAMWILL/GAMWILL Zombie fun character free sample/Animation/Zombie_Damage.fbx
   uploadId: 670389
