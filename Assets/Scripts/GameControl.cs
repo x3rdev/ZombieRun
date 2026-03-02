@@ -96,8 +96,8 @@ public class GameControl : MonoBehaviour
           yield return new WaitForSeconds(2);
 
           // 2. Calculate a random position (so they don't all spawn in one line)
-          Vector3 spawnPos = transform.position + new Vector3(
-              0, 
+          Vector3 spawnPos = new Vector3(
+              UnityEngine.Random.Range(-10f, 10f),
               0, 
               20
           );
