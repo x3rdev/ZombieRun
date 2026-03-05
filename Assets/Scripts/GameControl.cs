@@ -15,6 +15,9 @@ public class GameControl : MonoBehaviour
     
     // Squad Management
     public List<GameObject> soldiers = new List<GameObject>();
+    [Header("Squad Separation")]
+    public float separationDistance = 1.0f; 
+    public float separationForce = 2.0f;
 
     [SerializeField] public TextMeshProUGUI killCountText;
     [SerializeField] public GameObject playButton;
@@ -57,12 +60,47 @@ public class GameControl : MonoBehaviour
             }
 
             // Move the entire squad
-            foreach (GameObject member in soldiers)
+            // 1. Calculate center of mass for camera tracking if needed (optional)
+            
+            // 2. Apply movement and separation
+            for (int i = 0; i < soldiers.Count; i++)
             {
-                if (member != null)
+                GameObject member = soldiers[i];
+                if (member == null) continue;
+
+                // Player Input Movement
+                Vector3 moveDir = new Vector3(horizontalInput * 5, 0, 0);
+
+                // Separation Logic (Boids-like)
+                Vector3 separation = Vector3.zero;
+                foreach (GameObject other in soldiers)
                 {
-                    member.transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);
+                    if (member == other || other == null) continue;
+
+                    float dist = Vector3.Distance(member.transform.position, other.transform.position);
+                    if (dist < separationDistance)
+                    {
+                        Vector3 pushDir = member.transform.position - other.transform.position;
+                        // Push away stronger if closer
+                        separation += pushDir.normalized / (dist + 0.001f); 
+                    }
                 }
+
+                // Apply both Input + Separation
+                // We keep Y at 0 (or original Y) to prevent floating/sinking
+                Vector3 finalMove = moveDir + (separation * separationForce);
+                
+                // Restrict Z movement slightly so they don't fall too far behind/ahead? 
+                // For now, let them float naturally in X/Z to form a blob.
+                
+                member.transform.Translate(finalMove * Time.deltaTime, Space.World);
+                
+                // Clamp specific constraints if needed
+                // e.g. Keep Z within -2 to +2 of leader?
+                // For now, just keeping them near 0 Y level
+                Vector3 pos = member.transform.position;
+                pos.y = 0; 
+                member.transform.position = pos;
             }
         }
     }
@@ -111,20 +149,12 @@ public class GameControl : MonoBehaviour
         winText.gameObject.SetActive(false);
     }
 
-    public void ApplyMathGate(MultiplierWall.ModifierType operation, int value)
+    public void ApplyMathGate(int value)
     {
         if (soldiers.Count == 0) return;
 
         int currentCount = soldiers.Count;
-        int newCount = currentCount;
-
-        switch (operation)
-        {
-            case MultiplierWall.ModifierType.Add: newCount += value; break;
-            case MultiplierWall.ModifierType.Sub: newCount -= value; break;
-            case MultiplierWall.ModifierType.Mul: newCount *= value; break;
-            case MultiplierWall.ModifierType.Div: newCount /= value; break;
-        }
+        int newCount = currentCount + value; // Just add the value (negative subtracts)
 
         if (newCount < 1) newCount = 1; // Minimum 1 for now, or 0 for Game Over
 
@@ -175,10 +205,12 @@ public class GameControl : MonoBehaviour
 
           if (wallScript != null)
           {
-              var types = System.Enum.GetValues(typeof(MultiplierWall.ModifierType));
-              var operation = (MultiplierWall.ModifierType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
-              wallScript.operation = operation;
-              wallScript.value = 4;
+              // Simple random range for additive/subtractive values
+              // Range from -5 to 5, excluding 0 to be interesting
+              int val = UnityEngine.Random.Range(-5, 6);
+              if (val == 0) val = 1; 
+              
+              wallScript.value = val;
               wallScript.speed = 5;
               wallScript.UpdateVisuals(); 
           }

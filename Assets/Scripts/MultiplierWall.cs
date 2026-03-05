@@ -3,16 +3,8 @@ using TMPro;
 
 public class MultiplierWall : MonoBehaviour
 {
-    public enum ModifierType
-    {
-        Add,
-        Sub,
-        Mul,
-        Div
-    }
 
     [Header("Gate Settings")]
-    public ModifierType operation;
     public int value;
 
     [Header("Visuals")]
@@ -41,17 +33,24 @@ public class MultiplierWall : MonoBehaviour
         UpdateVisuals();
     }
 
+    public void HitByBullet()
+    {
+        value++;
+        UpdateVisuals();
+    }
+
     public void UpdateVisuals()
     {
         if (gateText == null || gateRenderer == null) return;
 
-        // 1. Set the Text based on the enum
-        switch (operation)
+        // 1. Set the Text based on the value
+        if (value >= 0)
         {
-            case ModifierType.Add: gateText.text = "+" + value; break;
-            case ModifierType.Sub: gateText.text = "-" + value; break;
-            case ModifierType.Mul: gateText.text = "×" +value; break;
-            case ModifierType.Div: gateText.text = "÷" + value; break;
+            gateText.text = "+" + value;
+        }
+        else
+        {
+            gateText.text = value.ToString();
         }
 
         // 2. Set the Color safely using MaterialPropertyBlock
@@ -59,8 +58,7 @@ public class MultiplierWall : MonoBehaviour
         MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
         gateRenderer.GetPropertyBlock(propBlock);
         
-        Color targetColor = (operation == ModifierType.Add || operation == ModifierType.Mul) 
-                            ? positiveColor : negativeColor;
+        Color targetColor = (value >= 0) ? positiveColor : negativeColor;
 
         propBlock.SetColor("_BaseColor", targetColor); // URP Standard
         propBlock.SetColor("_Color", targetColor);     // Legacy Standard
@@ -76,7 +74,7 @@ public class MultiplierWall : MonoBehaviour
             
             if (GameControl.Instance != null)
             {
-                GameControl.Instance.ApplyMathGate(operation, value);
+                GameControl.Instance.ApplyMathGate(value);
             }
 
             // 3. Visual feedback: Disable the gate or play an effect
