@@ -1,14 +1,21 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class GameControl : MonoBehaviour
-{  
+{
+    public static GameControl Instance;
+
     private bool gameRunning = false;
     private int killCount = 0;
+    
+    // Squad Management
+    public List<GameObject> soldiers = new List<GameObject>();
+
     [SerializeField] public TextMeshProUGUI killCountText;
     [SerializeField] public GameObject playButton;
     [SerializeField] public TextMeshProUGUI loseText;
@@ -17,6 +24,11 @@ public class GameControl : MonoBehaviour
     [SerializeField] public GameObject soldier;
     [SerializeField] public GameObject zombiePrefab;
     [SerializeField] public GameObject wallPrefab;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,12 +45,36 @@ public class GameControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(gameRunning)
+        {   
+            float horizontalInput = 0;
+            if (Keyboard.current != null)
+            {
+                if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+                    horizontalInput = -1;
+                else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                    horizontalInput = 1;
+            }
+
+            // Move the entire squad
+            foreach (GameObject member in soldiers)
+            {
+                if (member != null)
+                {
+                    member.transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);
+                }
+            }
+        }
     }
 
     public void StartGame()
     {
         // ui: setting up for gameplay
+
+        // Initialize Squad
+        soldiers.Clear();
+        soldiers.Add(soldier);
+        
         gameRunning = true;
         killCount = 0;
         killCountText.text = "Kill Count: " + killCount;
@@ -73,6 +109,49 @@ public class GameControl : MonoBehaviour
         playButton.SetActive(true);
         loseText.gameObject.SetActive(true);
         winText.gameObject.SetActive(false);
+    }
+
+    public void ApplyMathGate(MultiplierWall.ModifierType operation, int value)
+    {
+        if (soldiers.Count == 0) return;
+
+        int currentCount = soldiers.Count;
+        int newCount = currentCount;
+
+        switch (operation)
+        {
+            case MultiplierWall.ModifierType.Add: newCount += value; break;
+            case MultiplierWall.ModifierType.Sub: newCount -= value; break;
+            case MultiplierWall.ModifierType.Mul: newCount *= value; break;
+            case MultiplierWall.ModifierType.Div: newCount /= value; break;
+        }
+
+        if (newCount < 1) newCount = 1; // Minimum 1 for now, or 0 for Game Over
+
+        if (newCount > currentCount)
+        {
+            int toSpawn = newCount - currentCount;
+            for (int i = 0; i < toSpawn; i++)
+            {
+                // Spawn near the lead soldier with a slight random offset to prevent perfect stacking
+                Vector3 spawnPos = soldiers[0].transform.position + new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), 0, UnityEngine.Random.Range(-0.5f, 0.5f));
+                GameObject newSoldier = Instantiate(soldier, spawnPos, Quaternion.identity);
+                soldiers.Add(newSoldier);
+            }
+        }
+        else if (newCount < currentCount)
+        {
+            int toRemove = currentCount - newCount;
+            for (int i = 0; i < toRemove; i++)
+            {
+                if (soldiers.Count > 1) // Keep at least one alive ideally, or handle Game Over
+                {
+                    GameObject obj = soldiers[soldiers.Count - 1];
+                    soldiers.RemoveAt(soldiers.Count - 1);
+                    Destroy(obj);
+                }
+            }
+        }
     }
 
     public IEnumerator SpawnObjectLoop()
