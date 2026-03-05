@@ -21,6 +21,17 @@ public class ZombieMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (health <= 0)
+        {
+            if (!animator.GetBool("isDead")) 
+            {
+                speed = 0;
+                animator.SetBool("isDead", true);
+                Destroy(gameObject, 1.5f);
+            }
+            return;
+        }
+
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
         if (transform.position.z < attackThresholdZ)
@@ -28,13 +39,6 @@ public class ZombieMovement : MonoBehaviour
             animator.SetBool("isAttacking", true);
             speed = 0;
         }
-
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-
-
     }
 
 
