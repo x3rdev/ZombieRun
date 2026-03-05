@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Soldier : MonoBehaviour
 {
@@ -7,10 +8,11 @@ public class Soldier : MonoBehaviour
     [SerializeField] private float fireRate = 0.5f;
 
     private float nextFireTime = 0f;
+    private Animator animator;
 
     void Start()
     {
-
+        animator = GetComponent<Animator>();  
     }
 
     void Update()
@@ -20,6 +22,17 @@ public class Soldier : MonoBehaviour
             Shoot();
             nextFireTime = Time.time + fireRate;
         }
+        float horizontalInput = 0;
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+                horizontalInput = -1;
+            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                horizontalInput = 1;
+        }
+        animator.SetBool("Run", horizontalInput != 0);
+        transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);      
+        
     }
 
     void Shoot()

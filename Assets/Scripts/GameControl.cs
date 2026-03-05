@@ -33,19 +33,7 @@ public class GameControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameRunning)
-        {   
-            float horizontalInput = 0;
-            if (Keyboard.current != null)
-            {
-                if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-                    horizontalInput = -1;
-                else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-                    horizontalInput = 1;
-            }
-
-            soldier.transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);
-        }
+        
     }
 
     public void StartGame()
