@@ -1,14 +1,24 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class GameControl : MonoBehaviour
-{  
+{
+    public static GameControl Instance;
+
     private bool gameRunning = false;
     private int killCount = 0;
+    
+    // Squad Management
+    public List<GameObject> soldiers = new List<GameObject>();
+    [Header("Squad Separation")]
+    public float separationDistance = 1.0f; 
+    public float separationForce = 2.0f;
+
     [SerializeField] public TextMeshProUGUI killCountText;
     [SerializeField] public GameObject playButton;
     [SerializeField] public TextMeshProUGUI loseText;
@@ -17,6 +27,11 @@ public class GameControl : MonoBehaviour
     [SerializeField] public GameObject soldier;
     [SerializeField] public GameObject zombiePrefab;
     [SerializeField] public GameObject wallPrefab;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -44,13 +59,60 @@ public class GameControl : MonoBehaviour
                     horizontalInput = 1;
             }
 
-            soldier.transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);
+            // Move the entire squad
+            // 1. Calculate center of mass for camera tracking if needed (optional)
+            
+            // 2. Apply movement and separation
+            for (int i = 0; i < soldiers.Count; i++)
+            {
+                GameObject member = soldiers[i];
+                if (member == null) continue;
+
+                // Player Input Movement
+                Vector3 moveDir = new Vector3(horizontalInput * 5, 0, 0);
+
+                // Separation Logic (Boids-like)
+                Vector3 separation = Vector3.zero;
+                foreach (GameObject other in soldiers)
+                {
+                    if (member == other || other == null) continue;
+
+                    float dist = Vector3.Distance(member.transform.position, other.transform.position);
+                    if (dist < separationDistance)
+                    {
+                        Vector3 pushDir = member.transform.position - other.transform.position;
+                        // Push away stronger if closer
+                        separation += pushDir.normalized / (dist + 0.001f); 
+                    }
+                }
+
+                // Apply both Input + Separation
+                // We keep Y at 0 (or original Y) to prevent floating/sinking
+                Vector3 finalMove = moveDir + (separation * separationForce);
+                
+                // Restrict Z movement slightly so they don't fall too far behind/ahead? 
+                // For now, let them float naturally in X/Z to form a blob.
+                
+                member.transform.Translate(finalMove * Time.deltaTime, Space.World);
+                
+                // Clamp specific constraints if needed
+                // e.g. Keep Z within -2 to +2 of leader?
+                // For now, just keeping them near 0 Y level
+                Vector3 pos = member.transform.position;
+                pos.y = 0; 
+                member.transform.position = pos;
+            }
         }
     }
 
     public void StartGame()
     {
         // ui: setting up for gameplay
+
+        // Initialize Squad
+        soldiers.Clear();
+        soldiers.Add(soldier);
+        
         gameRunning = true;
         killCount = 0;
         killCountText.text = "Kill Count: " + killCount;
@@ -87,6 +149,41 @@ public class GameControl : MonoBehaviour
         winText.gameObject.SetActive(false);
     }
 
+    public void ApplyMathGate(int value)
+    {
+        if (soldiers.Count == 0) return;
+
+        int currentCount = soldiers.Count;
+        int newCount = currentCount + value; // Just add the value (negative subtracts)
+
+        if (newCount < 1) newCount = 1; // Minimum 1 for now, or 0 for Game Over
+
+        if (newCount > currentCount)
+        {
+            int toSpawn = newCount - currentCount;
+            for (int i = 0; i < toSpawn; i++)
+            {
+                // Spawn near the lead soldier with a slight random offset to prevent perfect stacking
+                Vector3 spawnPos = soldiers[0].transform.position + new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), 0, UnityEngine.Random.Range(-0.5f, 0.5f));
+                GameObject newSoldier = Instantiate(soldier, spawnPos, Quaternion.identity);
+                soldiers.Add(newSoldier);
+            }
+        }
+        else if (newCount < currentCount)
+        {
+            int toRemove = currentCount - newCount;
+            for (int i = 0; i < toRemove; i++)
+            {
+                if (soldiers.Count > 1) // Keep at least one alive ideally, or handle Game Over
+                {
+                    GameObject obj = soldiers[soldiers.Count - 1];
+                    soldiers.RemoveAt(soldiers.Count - 1);
+                    Destroy(obj);
+                }
+            }
+        }
+    }
+
     public IEnumerator SpawnObjectLoop()
     {
       while (true) 
@@ -108,10 +205,12 @@ public class GameControl : MonoBehaviour
 
           if (wallScript != null)
           {
-              var types = System.Enum.GetValues(typeof(MultiplierWall.ModifierType));
-              var operation = (MultiplierWall.ModifierType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
-              wallScript.operation = operation;
-              wallScript.value = 4;
+              // Simple random range for additive/subtractive values
+              // Range from -5 to 5, excluding 0 to be interesting
+              int val = UnityEngine.Random.Range(-5, 6);
+              if (val == 0) val = 1; 
+              
+              wallScript.value = val;
               wallScript.speed = 5;
               wallScript.UpdateVisuals(); 
           }

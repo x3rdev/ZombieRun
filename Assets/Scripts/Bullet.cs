@@ -30,5 +30,14 @@ public class Bullet : MonoBehaviour
           }
           Destroy(gameObject);
         }
+        else 
+        {
+            MultiplierWall wall = other.GetComponent<MultiplierWall>();
+            if (wall != null)
+            {
+                wall.HitByBullet();
+                Destroy(gameObject);
+            }
+        }
     }
 }
