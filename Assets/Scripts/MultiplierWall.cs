@@ -74,6 +74,10 @@ public class MultiplierWall : MonoBehaviour
         {
             hasBeenTriggered = true; // Lock the gate
             
+            if (GameControl.Instance != null)
+            {
+                GameControl.Instance.ApplyMathGate(operation, value);
+            }
 
             // 3. Visual feedback: Disable the gate or play an effect
             gameObject.SetActive(false); 
