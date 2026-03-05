@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public class ZombieMovement : MonoBehaviour
+public class Zombie : MonoBehaviour
 {
 
     public float speed = 1;

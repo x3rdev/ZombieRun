@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     { 
         if(other.CompareTag("Zombie")) {
-          ZombieMovement zombie = other.GetComponent<ZombieMovement>();
+          Zombie zombie = other.GetComponent<Zombie>();
           if (zombie != null)
           {
               zombie.TakeDamage(damage);

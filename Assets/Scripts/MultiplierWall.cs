@@ -71,10 +71,11 @@ public class MultiplierWall : MonoBehaviour
         if (!hasBeenTriggered && other.CompareTag("Player"))
         {
             hasBeenTriggered = true; // Lock the gate
-            
-            if (GameControl.Instance != null)
+            Soldier soldier = other.GetComponent<Soldier>();
+            if (soldier != null)
             {
-                GameControl.Instance.ApplyMathGate(value);
+                soldier.ApplyMathGate(value);
+                
             }
 
             // 3. Visual feedback: Disable the gate or play an effect
