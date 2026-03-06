@@ -94,14 +94,20 @@ public class GameControl : MonoBehaviour
     {
       while (true) 
       {
-          yield return new WaitForSeconds(2);
+          // Decrease spawn rate to every 4 seconds
+          yield return new WaitForSeconds(8);
+          
           Vector3 zombiePos = new Vector3(
               UnityEngine.Random.Range(-10f, 10f),
               0, 
               20
           );
+          
+          // Randomly choose left (-5) or right (5) side for the wall
+          float wallX = UnityEngine.Random.Range(0, 2) == 0 ? -5f : 5f;
+          
           Vector3 wallPos = new Vector3(
-              5,
+              wallX,
               1.5F, 
               30
           );
