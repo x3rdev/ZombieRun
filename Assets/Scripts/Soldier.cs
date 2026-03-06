@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class Soldier : MonoBehaviour
 {
     // Squad Management
+    [Header("Effects")]
+    public GameObject deathParticlePrefab;
     public List<GameObject> soldiers = new List<GameObject>();
     [Header("Squad Separation")]
     public float separationDistance = 1.0f; 
@@ -127,6 +129,31 @@ public class Soldier : MonoBehaviour
                     Destroy(obj);
                 }
             }
+        }
+        
+    }
+    public void DecrementSoldiers()
+    {
+        // We keep at least 1 (the leader) to avoid a null reference on the script holder
+        if (soldiers.Count > 1)
+        {
+            int lastIndex = soldiers.Count - 1;
+            GameObject soldierToDestroy = soldiers[lastIndex];
+
+            // 1. Play Particle Effect at the soldier's position
+            if (deathParticlePrefab != null)
+            {
+                Instantiate(deathParticlePrefab, soldierToDestroy.transform.position, Quaternion.identity);
+            }
+
+            // 2. Remove from List and Destroy
+            soldiers.RemoveAt(lastIndex);
+            Destroy(soldierToDestroy);
+        }
+        else
+        {
+            Debug.Log("Only the leader is left!");
+            // Optional: Trigger Game Over logic here
         }
     }
 }

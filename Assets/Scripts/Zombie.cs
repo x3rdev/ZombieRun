@@ -8,6 +8,8 @@ public class Zombie : MonoBehaviour
 
     private Animator animator;
 
+    public GameObject deathParticlePrefab;
+
     public float attackThresholdZ = 15F;
 
     public float health = 10;
@@ -27,6 +29,7 @@ public class Zombie : MonoBehaviour
             {
                 speed = 0;
                 animator.SetBool("isDead", true);
+                Instantiate(deathParticlePrefab, gameObject.transform.position, Quaternion.identity);
                 Destroy(gameObject, 1.5f);
             }
             return;

@@ -946,6 +946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieMovement
   speed: 3
+  deathParticlePrefab: {fileID: 8656522925564163052, guid: e509867be4f82f246a95eca1ee5a2d61, type: 3}
   attackThresholdZ: 2
   health: 10
 --- !u!136 &-2442756554735407692
