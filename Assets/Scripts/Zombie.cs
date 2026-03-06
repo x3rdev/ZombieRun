@@ -30,6 +30,12 @@ public class Zombie : MonoBehaviour
                 speed = 0;
                 animator.SetBool("isDead", true);
                 Instantiate(deathParticlePrefab, gameObject.transform.position, Quaternion.identity);
+                
+                if (GameControl.Instance != null)
+                {
+                    GameControl.Instance.IncrementKillCount();
+                }
+
                 Destroy(gameObject, 1.5f);
             }
             return;

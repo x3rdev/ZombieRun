@@ -62,7 +62,7 @@ public class GameControl : MonoBehaviour
         killCount = 0;
         killCountText.text = "Kill Count: " + killCount;
         killCountText.gameObject.SetActive(true);
-        if (mainMenuBackground != null) mainMenuBackground.SetActive(false);
+        mainMenuBackground.SetActive(false);
         playButton.SetActive(false);
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
