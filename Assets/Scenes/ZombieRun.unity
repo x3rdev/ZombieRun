@@ -372,9 +372,9 @@ GameObject:
   - component: {fileID: 450273671}
   - component: {fileID: 450273674}
   - component: {fileID: 450273673}
-  - component: {fileID: 450273672}
+  - component: {fileID: 450273675}
   m_Layer: 0
-  m_Name: Barrier
+  m_Name: RightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -395,28 +395,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1793502871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!64 &450273672
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 450273670}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 1
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &450273673
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -474,6 +452,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450273670}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &450273675
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450273670}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.000002, y: 2, z: 10}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!1 &513303631
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,9 +621,9 @@ GameObject:
   - component: {fileID: 682108232}
   - component: {fileID: 682108235}
   - component: {fileID: 682108234}
-  - component: {fileID: 682108233}
+  - component: {fileID: 682108236}
   m_Layer: 0
-  m_Name: Barrier (1)
+  m_Name: LeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -645,28 +644,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1793502871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!64 &682108233
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682108231}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 1
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &682108234
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -724,6 +701,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682108231}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &682108236
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682108231}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.000002, y: 2, z: 10}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!1 &743032641
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +923,10 @@ PrefabInstance:
     - target: {fileID: 6613100156666491087, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
       propertyPath: m_UseGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6613100156666491087, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7087704261632488410, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1129,6 +1131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b56e773db645ee44cb82720894de0a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Soldier
+  deathParticlePrefab: {fileID: 0}
   soldiers: []
   separationDistance: 1
   separationForce: 2

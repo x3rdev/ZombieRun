@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour
           if (zombie != null)
           {
               zombie.TakeDamage(damage);
-              
+              Destroy(gameObject);
           }
         }
         else 
@@ -35,8 +35,9 @@ public class Bullet : MonoBehaviour
             if (wall != null)
             {
                 wall.HitByBullet();
+                Destroy(gameObject);
             }
         }
-        Destroy(gameObject);
+        
     }
 }
