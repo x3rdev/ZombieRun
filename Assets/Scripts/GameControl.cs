@@ -15,6 +15,7 @@ public class GameControl : MonoBehaviour
 
     [SerializeField] public TextMeshProUGUI killCountText;
     [SerializeField] public GameObject playButton;
+    [SerializeField] public GameObject mainMenuBackground;
     [SerializeField] public TextMeshProUGUI loseText;
     [SerializeField] public TextMeshProUGUI winText;
     [SerializeField] public TextMeshProUGUI playButtonText;
@@ -33,7 +34,10 @@ public class GameControl : MonoBehaviour
         // ui setup
         killCountText.gameObject.SetActive(false);
         playButtonText.text = "Play";
+        
+        if (mainMenuBackground != null) mainMenuBackground.SetActive(true);
         playButton.SetActive(true);
+        
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
         
@@ -58,6 +62,7 @@ public class GameControl : MonoBehaviour
         killCount = 0;
         killCountText.text = "Kill Count: " + killCount;
         killCountText.gameObject.SetActive(true);
+        if (mainMenuBackground != null) mainMenuBackground.SetActive(false);
         playButton.SetActive(false);
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
@@ -68,6 +73,7 @@ public class GameControl : MonoBehaviour
     {
         // ui: setting up for win
         playButtonText.text = "Play Again";
+        if (mainMenuBackground != null) mainMenuBackground.SetActive(true);
         playButton.SetActive(true);
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(true);
@@ -85,6 +91,7 @@ public class GameControl : MonoBehaviour
     {
         // ui: setting up for lose
         playButtonText.text = "Play Again";
+        if (mainMenuBackground != null) mainMenuBackground.SetActive(true);
         playButton.SetActive(true);
         loseText.gameObject.SetActive(true);
         winText.gameObject.SetActive(false);
