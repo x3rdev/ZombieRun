@@ -29,60 +29,67 @@ public class Soldier : MonoBehaviour
     }
 
     void Update()
-{
-    // 1. Read input
-    float horizontalInput = 0;
-    if (Keyboard.current != null)
     {
-        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-            horizontalInput = -1;
-        else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-            horizontalInput = 1;
-    }
-
-    // 2. Build movement vector (leader direction)
-    movement = new Vector3(horizontalInput, 0, 0).normalized * 5f;
-
-    // 3. Animate
-    animator.SetBool("Run", horizontalInput != 0);
-
-    // Shooting handled as before
-    if (Time.time >= nextFireTime)
-    {
-        Shoot();
-        nextFireTime = Time.time + fireRate;
-    }
-}
-
-void FixedUpdate()
-{
-    // Move all squad members
-    foreach (GameObject member in soldiers)
-    {
-        if (member == null) continue;
-        Rigidbody memberRb = member.GetComponent<Rigidbody>();
-        if (memberRb == null) continue;
-
-        // Separation logic
-        Vector3 separation = Vector3.zero;
-        foreach (GameObject other in soldiers)
+        // 1. Read input
+        float horizontalInput = 0;
+        if (Keyboard.current != null)
         {
-            if (member == other || other == null) continue;
-            float dist = Vector3.Distance(member.transform.position, other.transform.position);
-            if (dist < separationDistance)
-            {
-                Vector3 pushDir = member.transform.position - other.transform.position;
-                separation += pushDir.normalized / (dist + 0.001f);
-            }
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+                horizontalInput = -1;
+            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                horizontalInput = 1;
         }
 
-        Vector3 finalMove = movement + separation * separationForce;
+        // 2. Build movement vector (leader direction)
+        movement = new Vector3(horizontalInput, 0, 0).normalized * 5f;
 
-        // Move using Rigidbody.MovePosition
-        Vector3 targetPos = memberRb.position + finalMove * Time.fixedDeltaTime;
-        memberRb.MovePosition(targetPos);
+        // 3. Animate
+        animator.SetBool("Run", horizontalInput != 0);
+
+        // Shooting handled as before
+        if (Time.time >= nextFireTime)
+        {
+            Shoot();
+            nextFireTime = Time.time + fireRate;
+        }
     }
-}
+
+    void FixedUpdate()
+    {
+        if (soldiers.Count == 0) return;
+
+        Vector3 forward = movement.normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, forward);
+
+        foreach (GameObject member in soldiers)
+        {
+            if (member == null) continue;
+            Rigidbody memberRb = member.GetComponent<Rigidbody>();
+            if (memberRb == null) continue;
+
+            Vector3 separation = Vector3.zero;
+            foreach (GameObject other in soldiers)
+            {
+                if (member == other || other == null) continue;
+
+                Vector3 toOther = member.transform.position - other.transform.position;
+                float dist = toOther.magnitude;
+                if (dist < separationDistance)
+                {
+                    Vector3 lateralPush = Vector3.Project(toOther.normalized / (dist + 0.001f), right);
+                    separation += lateralPush;
+                }
+            }
+
+            float maxSeparation = 1f;
+            if (separation.magnitude > maxSeparation)
+                separation = separation.normalized * maxSeparation;
+
+            Vector3 finalMove = forward * movement.magnitude + separation * separationForce;
+            Vector3 targetPos = memberRb.position + finalMove * Time.fixedDeltaTime;
+            memberRb.MovePosition(targetPos);
+        }
+    }
 
   void Shoot()
     {
