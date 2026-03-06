@@ -17,80 +17,74 @@ public class Soldier : MonoBehaviour
 
     private float nextFireTime = 0f;
     private Animator animator;
+    private Rigidbody rb;
+    private Vector3 movement;
 
     void Start()
     {
         animator = GetComponent<Animator>();  
         soldiers.Clear();
         soldiers.Add(gameObject);
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
+{
+    // 1. Read input
+    float horizontalInput = 0;
+    if (Keyboard.current != null)
     {
-        float horizontalInput = 0;
-        if (Keyboard.current != null)
-        {
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-                horizontalInput = -1;
-            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-                horizontalInput = 1;
-        }
-
-        // Move the entire squad
-        // 1. Calculate center of mass for camera tracking if needed (optional)
-        
-        // 2. Apply movement and separation
-        for (int i = 0; i < soldiers.Count; i++)
-        {
-            GameObject member = soldiers[i];
-            if (member == null) continue;
-
-            // Player Input Movement
-            Vector3 moveDir = new Vector3(horizontalInput * 5, 0, 0);
-
-            // Separation Logic (Boids-like)
-            Vector3 separation = Vector3.zero;
-            foreach (GameObject other in soldiers)
-            {
-                if (member == other || other == null) continue;
-
-                float dist = Vector3.Distance(member.transform.position, other.transform.position);
-                if (dist < separationDistance)
-                {
-                    Vector3 pushDir = member.transform.position - other.transform.position;
-                    // Push away stronger if closer
-                    separation += pushDir.normalized / (dist + 0.001f); 
-                }
-            }
-
-            // Apply both Input + Separation
-            // We keep Y at 0 (or original Y) to prevent floating/sinking
-            Vector3 finalMove = moveDir + (separation * separationForce);
-            
-            // Restrict Z movement slightly so they don't fall too far behind/ahead? 
-            // For now, let them float naturally in X/Z to form a blob.
-            
-            member.GetComponent<Rigidbody>().MovePosition(finalMove * Time.deltaTime);
-            
-            // Clamp specific constraints if needed
-            // e.g. Keep Z within -2 to +2 of leader?
-            // For now, just keeping them near 0 Y level
-            Vector3 pos = member.transform.position;
-            pos.y = 0; 
-            member.transform.position = pos;
-        }
-        if (Time.time >= nextFireTime)
-        {
-            Shoot();
-            nextFireTime = Time.time + fireRate;
-        }
-        animator.SetBool("Run", horizontalInput != 0);
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.MovePosition(new Vector3(horizontalInput * 5 * Time.deltaTime, 0, 0));
-        
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            horizontalInput = -1;
+        else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            horizontalInput = 1;
     }
 
-    void Shoot()
+    // 2. Build movement vector (leader direction)
+    movement = new Vector3(horizontalInput, 0, 0).normalized * 5f;
+
+    // 3. Animate
+    animator.SetBool("Run", horizontalInput != 0);
+
+    // Shooting handled as before
+    if (Time.time >= nextFireTime)
+    {
+        Shoot();
+        nextFireTime = Time.time + fireRate;
+    }
+}
+
+void FixedUpdate()
+{
+    // Move all squad members
+    foreach (GameObject member in soldiers)
+    {
+        if (member == null) continue;
+        Rigidbody memberRb = member.GetComponent<Rigidbody>();
+        if (memberRb == null) continue;
+
+        // Separation logic
+        Vector3 separation = Vector3.zero;
+        foreach (GameObject other in soldiers)
+        {
+            if (member == other || other == null) continue;
+            float dist = Vector3.Distance(member.transform.position, other.transform.position);
+            if (dist < separationDistance)
+            {
+                Vector3 pushDir = member.transform.position - other.transform.position;
+                separation += pushDir.normalized / (dist + 0.001f);
+            }
+        }
+
+        Vector3 finalMove = movement + separation * separationForce;
+
+        // Move using Rigidbody.MovePosition
+        Vector3 targetPos = memberRb.position + finalMove * Time.fixedDeltaTime;
+        memberRb.MovePosition(targetPos);
+    }
+}
+
+  void Shoot()
     {
         if (bulletPrefab != null && firePoint != null)
         {

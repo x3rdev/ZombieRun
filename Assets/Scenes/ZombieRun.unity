@@ -925,8 +925,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6613100156666491087, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 6613100156666491087, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
       propertyPath: m_IsKinematic
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6613100156666491087, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7087704261632488410, guid: 9ef45eaa3d6c6490084f49d0473b98f7, type: 3}
       propertyPath: m_LocalPosition.x
