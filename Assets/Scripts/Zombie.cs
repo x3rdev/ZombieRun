@@ -36,7 +36,11 @@ public class Zombie : MonoBehaviour
 
                 if (deathParticlePrefab != null)
                     Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
-                
+                GameControl gameControl = FindFirstObjectByType<GameControl>();
+                if (gameControl != null)
+                {
+                    gameControl.IncrementKillCount();
+                }
                 Destroy(gameObject, 1.5f);
             }
             return;
