@@ -134,7 +134,7 @@ public class GameControl : MonoBehaviour
     public IEnumerator SpawnZombies()
     {
         // Start moderately
-        float spawnInterval = 2.0f;
+        float spawnInterval = 2.5f;
         while (gameRunning)
         {
             yield return new WaitForSeconds(spawnInterval);
