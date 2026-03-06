@@ -70,7 +70,7 @@ public class Soldier : MonoBehaviour
             // Restrict Z movement slightly so they don't fall too far behind/ahead? 
             // For now, let them float naturally in X/Z to form a blob.
             
-            member.transform.Translate(finalMove * Time.deltaTime, Space.World);
+            member.GetComponent<Rigidbody>().MovePosition(finalMove * Time.deltaTime);
             
             // Clamp specific constraints if needed
             // e.g. Keep Z within -2 to +2 of leader?
@@ -85,7 +85,8 @@ public class Soldier : MonoBehaviour
             nextFireTime = Time.time + fireRate;
         }
         animator.SetBool("Run", horizontalInput != 0);
-        transform.Translate(horizontalInput * 5 * Time.deltaTime, 0, 0);      
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.MovePosition(new Vector3(horizontalInput * 5 * Time.deltaTime, 0, 0));
         
     }
 
@@ -93,7 +94,7 @@ public class Soldier : MonoBehaviour
     {
         if (bulletPrefab != null && firePoint != null)
         {
-            Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0, 90, 0));
+            Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0, 90, 90));
         }
     }
 
