@@ -66,7 +66,8 @@ public class GameControl : MonoBehaviour
         playButton.SetActive(false);
         loseText.gameObject.SetActive(false);
         winText.gameObject.SetActive(false);
-        StartCoroutine(SpawnObjectLoop());
+        StartCoroutine(SpawnWalls());
+        StartCoroutine(SpawnZombies());
     }
 
     public void WinGame()
@@ -97,19 +98,13 @@ public class GameControl : MonoBehaviour
         winText.gameObject.SetActive(false);
     }
 
-    public IEnumerator SpawnObjectLoop()
+    public IEnumerator SpawnWalls()
     {
-      while (true) 
+      while (gameRunning) 
       {
-          // Decrease spawn rate to every 4 seconds
-          yield return new WaitForSeconds(8);
-          
-          Vector3 zombiePos = new Vector3(
-              UnityEngine.Random.Range(-10f, 10f),
-              0, 
-              20
-          );
-          
+          yield return new WaitForSeconds(6);
+          if (!gameRunning) yield break;
+
           // Randomly choose left (-5) or right (5) side for the wall
           float wallX = UnityEngine.Random.Range(0, 2) == 0 ? -5f : 5f;
           
@@ -118,7 +113,7 @@ public class GameControl : MonoBehaviour
               1.5F, 
               30
           );
-          Instantiate(zombiePrefab, zombiePos, Quaternion.AngleAxis(180, Vector3.up));
+
           GameObject wall = Instantiate(wallPrefab, wallPos, Quaternion.AngleAxis(0, Vector3.up));
           MultiplierWall wallScript = wall.GetComponent<MultiplierWall>();
 
@@ -134,5 +129,36 @@ public class GameControl : MonoBehaviour
               wallScript.UpdateVisuals(); 
           }
       }
+    }
+
+    public IEnumerator SpawnZombies()
+    {
+        // Start moderately
+        float spawnInterval = 2.0f;
+        while (gameRunning)
+        {
+            yield return new WaitForSeconds(spawnInterval);
+            if (!gameRunning) yield break;
+
+            int zombieCount = 1;
+
+            // Increase difficulty: spawn more zombies 
+            if (spawnInterval < 2.0f) zombieCount = UnityEngine.Random.Range(1, 3);
+            if (spawnInterval < 1.0f) zombieCount = UnityEngine.Random.Range(2, 4);
+
+            for(int i = 0; i < zombieCount; i++)
+            {
+                // Slight random offset for multiple zombies
+                Vector3 zombiePos = new Vector3(
+                    UnityEngine.Random.Range(-10f, 10f),
+                    0, 
+                    20 + (i * 2.0f) 
+                );
+                Instantiate(zombiePrefab, zombiePos, Quaternion.AngleAxis(180, Vector3.up));
+            }
+
+            // Decrease spawn interval over time (5% faster each wave), clamped to 0.5s minimum
+            spawnInterval = Mathf.Max(0.5f, spawnInterval * 0.95f);
+        }
     }
 }
