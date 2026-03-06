@@ -19,7 +19,7 @@ public class MultiplierWall : MonoBehaviour
 
     private bool hasBeenTriggered = false;
 
-    private void OnStart()
+    void OnStart()
     {
       Destroy(gameObject, 5);
     }
