@@ -91,7 +91,7 @@ public class Soldier : MonoBehaviour
     {
         if (bulletPrefab != null && firePoint != null)
         {
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Instantiate(bulletPrefab, firePoint.position, Quaternion.Euler(0, 90, 0));
         }
     }
 
