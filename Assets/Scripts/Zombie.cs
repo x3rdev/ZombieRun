@@ -29,7 +29,14 @@ public class Zombie : MonoBehaviour
             {
                 speed = 0;
                 animator.SetBool("isDead", true);
-                Instantiate(deathParticlePrefab, gameObject.transform.position, Quaternion.identity);
+                
+
+                if(GetComponent<Collider>() != null) 
+                    GetComponent<Collider>().enabled = false;
+
+                if (deathParticlePrefab != null)
+                    Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
+                
                 Destroy(gameObject, 1.5f);
             }
             return;
