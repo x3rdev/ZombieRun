@@ -10,7 +10,7 @@ public class Zombie : MonoBehaviour
 
     public GameObject deathParticlePrefab;
 
-    public float attackThresholdZ = 15F;
+    public float attackThresholdZ = 18F;
 
     public float health = 10;
 

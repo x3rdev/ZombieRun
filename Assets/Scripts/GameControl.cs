@@ -105,36 +105,32 @@ public class GameControl : MonoBehaviour
           yield return new WaitForSeconds(6);
           if (!gameRunning) yield break;
 
-          // Randomly choose left (-5) or right (5) side for the wall
-          float wallX = UnityEngine.Random.Range(0, 2) == 0 ? -5f : 5f;
-          
-          Vector3 wallPos = new Vector3(
-              wallX,
-              1.5F, 
-              30
-          );
+          int positiveValue = UnityEngine.Random.Range(1, 6);
+          int negativeValue = -UnityEngine.Random.Range(1, 6);
+          bool positiveOnLeft = UnityEngine.Random.Range(0, 2) == 0;
 
-          GameObject wall = Instantiate(wallPrefab, wallPos, Quaternion.AngleAxis(0, Vector3.up));
-          MultiplierWall wallScript = wall.GetComponent<MultiplierWall>();
-
-          if (wallScript != null)
-          {
-              // Simple random range for additive/subtractive values
-              // Range from -5 to 5, excluding 0 to be interesting
-              int val = UnityEngine.Random.Range(-5, 6);
-              if (val == 0) val = 1; 
-              
-              wallScript.value = val;
-              wallScript.speed = 5;
-              wallScript.UpdateVisuals(); 
-          }
+          SpawnWallAtX(-5f, positiveOnLeft ? positiveValue : negativeValue);
+          SpawnWallAtX(5f, positiveOnLeft ? negativeValue : positiveValue);
       }
+    }
+
+    private void SpawnWallAtX(float wallX, int value)
+    {
+        Vector3 wallPos = new Vector3(wallX, 1.5f, 30f);
+        GameObject wall = Instantiate(wallPrefab, wallPos, Quaternion.identity);
+        MultiplierWall wallScript = wall.GetComponent<MultiplierWall>();
+
+        if (wallScript == null) return;
+
+        wallScript.value = value;
+        wallScript.speed = 5f;
+        wallScript.UpdateVisuals();
     }
 
     public IEnumerator SpawnZombies()
     {
-        // Start moderately
-        float spawnInterval = 2.5f;
+        // Start slower and ramp gently
+        float spawnInterval = 3.2f;
         while (gameRunning)
         {
             yield return new WaitForSeconds(spawnInterval);
@@ -142,9 +138,8 @@ public class GameControl : MonoBehaviour
 
             int zombieCount = 1;
 
-            // Increase difficulty: spawn more zombies 
-            if (spawnInterval < 2.0f) zombieCount = UnityEngine.Random.Range(1, 3);
-            if (spawnInterval < 1.0f) zombieCount = UnityEngine.Random.Range(2, 4);
+            // Reduce pressure: at most 2 zombies in late waves
+            if (spawnInterval < 1.8f) zombieCount = UnityEngine.Random.Range(1, 3);
 
             for(int i = 0; i < zombieCount; i++)
             {
@@ -157,8 +152,8 @@ public class GameControl : MonoBehaviour
                 Instantiate(zombiePrefab, zombiePos, Quaternion.AngleAxis(180, Vector3.up));
             }
 
-            // Decrease spawn interval over time (5% faster each wave), clamped to 0.5s minimum
-            spawnInterval = Mathf.Max(0.5f, spawnInterval * 0.95f);
+            // Decrease spawn interval slowly, clamped to a safer minimum
+            spawnInterval = Mathf.Max(1.4f, spawnInterval * 0.97f);
         }
     }
 }
